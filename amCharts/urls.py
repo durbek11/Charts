@@ -3,6 +3,6 @@ from .views import *
 
 app_name = "app"
 
-urlpatterns =[
+urlpatterns = [
     path('', home, name="home"),
 ]
