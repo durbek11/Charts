@@ -1,0 +1,37 @@
+<header id="header" class="fixed-top header-inner-pages">
+    <div class="container d-flex align-items-center justify-content-between">
+
+        <h1 class="logo"><a href="">Charts</a></h1>
+        <nav id="navbar" class="navbar">
+            <ul>
+                <form action="{% url 'app:results' %}" class="d-flex">
+                    <input type="text" name="q" class="form-control" placeholder="Search" value="{{ search }}"
+                        minlength="3" maxlength="32">
+                    <button class="btn btn-outline-primary bi bi-search" type="submit"></button>
+                </form>
+                <li class="dropdown"><a href="#"><span>Drop Down</span> <i class="bi bi-chevron-down"></i></a>
+                    <ul>
+                        <li><a href="">Profile</a></li>
+                        <li><a href="">New</a></li>
+                        <li><a href="#">Drop Down 4</a></li>
+                        <li class="dropdown"><a href="#"><span>Scroll</span> <i class="bi bi-chevron-right"></i></a>
+                            <ul style="width: 160px !important;">
+                                <li><a class="scrollto" href="#about">About</a></li>
+                                <li><a class="scrollto" href="#skills">Skills</a></li>
+                                <li><a class="scrollto" href="#cta">Call To Action</a></li>
+                                <li><a class="scrollto" href="#portfolio">Portfolio</a></li>
+                                <li><a class="scrollto" href="#testimonials">Testimonials</a></li>
+                                <li><a class="scrollto" href="#contact">Contact</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+                <li><a class="getstarted nav-link scrollto " href="">Sign Up</a></li>
+                <li><a class="nav-link scrollto" href="">Login</a></li>
+                <li><a class="nav-link scrollto" href="">LogOut</a></li>
+            </ul>
+            <i class="bi bi-list mobile-nav-toggle"></i>
+        </nav><!-- .navbar -->
+
+    </div>
+</header>
