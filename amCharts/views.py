@@ -1,6 +1,6 @@
 from .models import *
-from .forms import *
+from django.shortcuts import render
 
 def home(request):
-    return render(request, 'pages/home.html', context)
+    return render(request, 'pages/home.html')
 
