@@ -1,9 +1,13 @@
-
+{% extends 'layout/base.html' %}
 {% block title %}Home{% endblock title %}
 
 {% block content %}
 
-
+<!-- User is authenticated -->
+{% if request.user.is_authenticated %}
+{% include 'includes/inner.html' %}
+{% endif %}
+<!-- User is authenticated -->
 
 <!-- User is not authenticated -->
 {% if not request.user.is_authenticated %}
