@@ -1,4 +1,4 @@
-{% extends 'layout/base.html' %}
+{% extends 'Layouts/base.html' %}
 {% block title %}Home{% endblock title %}
 
 {% block content %}
@@ -11,7 +11,7 @@
 
 <!-- User is not authenticated -->
 {% if not request.user.is_authenticated %}
-{% include 'includes/hero.html' %}
+{% include 'includes/single.html' %}
 {% include 'includes/about.html' %}
 
 {% endif %}
