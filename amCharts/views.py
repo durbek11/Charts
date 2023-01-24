@@ -8,6 +8,16 @@ User = get_user_model()
 def home(request):
     return render(request, 'pages/home.html')
 
+def signup(request):
+    form = Registration()
+    if request.method == "POST":
+        form = Registration(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('app:login')
+    
+    return render(request, 'registration/signup.html', {"form":form})
+
 def followToggle(request, author):
     if request.user.is_authenticated:
         authorObj = User.objects.get(username=author)
