@@ -1,8 +1,16 @@
 from django.shortcuts import render, get_object_or_404, redirect
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import PasswordChangeForm, AuthenticationForm
+from django.contrib.auth import update_session_auth_hash, login, authenticate, logout, get_user_model
+from django.http import HttpResponseRedirect
+from django.core.paginator import Paginator
+from django.contrib import messages
+from django.utils import timezone
+from django.db.models import Avg
+from django.views import generic
+from django.urls import reverse 
+from django.db.models import Q
 from .models import *
-from django.shortcuts import render
-from django.contrib.auth import login, authenticate, logout
-from django.contrib.auth import get_user_model
 User = get_user_model()
 
 def home(request):
