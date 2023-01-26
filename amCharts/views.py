@@ -14,12 +14,7 @@ from .models import *
 User = get_user_model()
 
 def home(request):
-    charts_count = Chart.objects.count()
-    user_count = User.objects.count()
-    date_joined_count = User.objects.filter(date_joined__date=timezone.now()-timezone.timedelta(0)).count()
-    users = User.objects.all().order_by('-id')[:date_joined_count]
-    elem_count = Element.objects.count()
-    following_actions = None
+    
     # created_on_count = None
     if request.user.is_authenticated:
         user = get_object_or_404(User, username=request.user)
@@ -30,14 +25,7 @@ def home(request):
     if contact.is_valid():
             contact.save()
             return redirect('app:home')
-    context = {
-        "charts_count":charts_count,
-        "user_count":user_count,
-        "elem_count":elem_count,
-        "following_actions":following_actions,
-        "users":users,
-        "contact":contact
-    }
+
     return render(request, 'pages/home.html')
 
 def signup(request):
