@@ -13,6 +13,10 @@ def home(request):
     elem_count = Element.objects.count()
     following_actions = None
     # created_on_count = None
+    if request.user.is_authenticated:
+        user = get_object_or_404(User, username=request.user)
+   
+        following_actions = user.followers.all().order_by('-id')[:15]
     return render(request, 'pages/home.html')
 
 def signup(request):
