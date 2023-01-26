@@ -6,6 +6,13 @@ from django.contrib.auth import get_user_model
 User = get_user_model()
 
 def home(request):
+    charts_count = Chart.objects.count()
+    user_count = User.objects.count()
+    date_joined_count = User.objects.filter(date_joined__date=timezone.now()-timezone.timedelta(0)).count()
+    users = User.objects.all().order_by('-id')[:date_joined_count]
+    elem_count = Element.objects.count()
+    following_actions = None
+    # created_on_count = None
     return render(request, 'pages/home.html')
 
 def signup(request):
