@@ -14,17 +14,6 @@ from .models import *
 User = get_user_model()
 
 def home(request):
-    
-    # created_on_count = None
-    if request.user.is_authenticated:
-        user = get_object_or_404(User, username=request.user)
-        following_actions = user.followers.all().order_by('-id')[:15]
-        contact = ContactUsForm()
-        if request.method == "POST":
-            contact = ContactUsForm(request.POST)
-    if contact.is_valid():
-            contact.save()
-            return redirect('app:home')
 
     return render(request, 'pages/home.html')
 
