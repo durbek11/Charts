@@ -27,6 +27,11 @@ def signup(request):
     
     return render(request, 'registration/signup.html', {"form":form})
 
+
+def logoutView(request):
+    logout(request)
+    return redirect("app:home")
+
 def followToggle(request, author):
     if request.user.is_authenticated:
         authorObj = User.objects.get(username=author)
@@ -72,7 +77,7 @@ def ProfileView(request, username):
         user_p = User.objects.get(username=username)
         author = get_object_or_404(User, username=username)
         return render(request, 'pages/profile.html')
-        
+
 def NewChartView(request):
     user_p = User.objects.get(username=request.user)
     user = User.objects.get(username=request.user)
