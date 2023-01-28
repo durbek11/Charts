@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }}</title>
+    <link href="{% static 'assets/vendor/animate.css/animate.min.css' %}" rel="stylesheet">
+    <link href="{% static 'assets/vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'assets/vendor/bootstrap-icons/bootstrap-icons.css' %}" rel="stylesheet">
+    <link href="{% static 'assets/vendor/boxicons/css/boxicons.min.css' %}" rel="stylesheet">
+    <link href="{% static 'assets/vendor/glightbox/css/glightbox.min.css' %}" rel="stylesheet">
+    <link href="{% static 'assets/vendor/remixicon/remixicon.css' %}" rel="stylesheet">
+    <link href="{% static 'assets/vendor/swiper/swiper-bundle.min.css' %}" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/profile.css' %}">
+</head>
+
+<body>
+    <section class="h-100 gradient-custom-2">
+        <div class="container py-5 h-100">
+            <div class="row d-flex justify-content-center align-items-center h-100">
+                <div class="col col-lg-9 col-xl-7">
+                    <div class="card">
+                        <div class="rounded-top text-white d-flex flex-row"
+                            style="background-color: #000; height:200px;">
+                            <div class="ms-4 mt-5 d-flex flex-column" style="width: 150px;">
+                                {% if request.user.username == user_p.username %}
+                                <a href="{% url 'app:settings' %}" style="width: 150px; z-index: 1">
+                                    <img src="{{ user_p.profile.image.url }}" alt="@{{ user_p.username }}"
+                                        class="img-fluid img-thumbnail mt-4 mb-2">
+                                </a>
+                                {% else %}
+                                <img src="{{ user_p.profile.image.url }}" alt="@{{ user_p.username }}"
+                                    class="img-fluid img-thumbnail mt-4 mb-2" style="width: 150px; z-index: 1">
+                                {% endif %}
+                                {% if request.user.username == user_p.username %}
+                                <button type="button" id="edit_btn" class="btn btn-outline-dark"
+                                    data-mdb-ripple-color="dark" style="z-index: 1;">Edit profile</button>
+                                {% else %}
+                                <form class="w-100" action="{% url 'app:follow' user_p.username %}" method="post"
+                                    style="z-index: 1;">
+                                    {% csrf_token %}
+                                    {% if user_p in request.user.followers.all %}
+                                    <button type="submit" class="btn btn-outline-danger w-100"
+                                        data-mdb-ripple-color="dark">Unfollow</button>
+                                    {% else %}
+                                    <button type="submit" class="btn btn-outline-dark w-100"
+                                        data-mdb-ripple-color="dark">Follow</button>
+                                    {% endif %}
+                                </form>
+                                {% endif %}
+                            </div>
+                            <div class="ms-3" style="margin-top: 100px;">
+                                <h5>{{ user_p.first_name }}</h5>
+                                <h6>{{ user_p.last_name }}</h6>
+                                <p>
+                                    <a class="text-light" href="{% url 'app:profile' user_p.username %}"
+                                        style="text-decoration: none;">@{{ user_p.username }}</a>
+                                    {% if user_p.profile.is_verify %}
+                                    <i class="bi bi-check-circle-fill"></i>
+                                    {% endif %}
+                                </p>
+                            </div>
+                            <p class="user_bio">
+                                {% if user_p.profile.bio %}
+                                {{ user_p.profile.bio }}
+                                {% endif %}
+                            </p>
+                        </div>
+                        <div class="p-4 text-black" style="background-color: #f8f9fa;">
+                            <div class="d-flex justify-content-end text-center py-1">
+                                <div>
+                                    <p class="mb-1 h5">{{user_chart_count}}</p>
+                                    <a href="?tab=charts" class="small text-muted mb-0">Charts</a>
+                                </div>
+                                <div class="px-3">
+                                    <p class="mb-1 h5">{{ user_p.following.count }}</p>
+                                    <a href="?tab=followers" class="small text-muted mb-0">Followers</a>
+                                </div>
+                                <div>
+                                    <p class="mb-1 h5">{{ user_p.followers.count }}</p>
+                                    <a href="?tab=following" class="small text-muted mb-0">Following</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body p-4 text-black">
+                            {% if tab_chart %}
+                            <div class="mb-5">
+                                <p class="lead fw-normal mb-1">Charts</p>
+                                <div class="p-4" style="background-color: #f8f9fa;">
+                                    {% for chart in tab_chart %}
+                                    <div>
+                                        <a class="text-dark" href="{% url 'app:chart' chart.slug %}">{{ chart.name
+                                            }}</a>
+                                        <p>{{ chart.caption }}</p>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            {% endif %}
+                            {% if title == "Charts" and user_chart_count == 0 %}
+                            <p class="lead fw-normal mb-1">
+                                No Charts Yet
+                            </p>
+                            {% if user_p.username == request.user.username %}
+                            <a class="btn btn-outline-success" href="{% url 'app:new' %}">New Chart</a>
+                            {% endif %}
+
+                            {% endif %}
+                            {% if user_followers %}
+                            <p class="lead fw-normal mb-1">Following</p>
+                            {% for followers in user_followers %}
+
+                            <div class="user_profile_quick_view" style="margin-top: 10px; margin-bottom: 10px;">
+                                <img class="following_profile_img" style="border-radius: 50%;"
+                                    src="{{ followers.profile.image.url }}" alt="@{{ following.username }}" width="30">
+                                <span>
+                                    <a class="text-dark" id="t-none"
+                                        href="{% url 'app:profile' followers.username %}">@{{followers.username }}</a>
+                                    {% if followers.profile.is_verify %}
+                                    <i class="bi bi-check-circle-fill"></i>
+                                    {% endif %}
+                                </span>
+                            </div>
+
+                            {% endfor %}
+                            {% endif %}
+                            {% if user_following %}
+                            <p class="lead fw-normal mb-1">Followers</p>
+                            {% for following in user_following %}
+                            <div class="user_profile_quick_view" style="margin-top: 10px; margin-bottom: 10px;">
+                                <img class="followers_profile_img" style="border-radius: 50%;"
+                                    src="{{ following.profile.image.url }}" alt="@{{ following.username }}" width="30">
+                                <span>
+                                    <a class="text-dark" id="t-none"
+                                        href="{% url 'app:profile' following.username %}">@{{following.username }}</a>
+                                    {% if following.profile.is_verify %}
+                                    <i class="bi bi-check-circle-fill"></i>
+                                    {% endif %}
+                                </span>
+                            </div>
+                            {% endfor %}
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <div class="edit_profile_div">
+        {% if request.user.username == user_p.username %}
+        <form method="post" enctype="multipart/form-data" class="w-25">
+            {% if profile_form.errors %}
+            <div id="msg" class="alert alert-danger alert-dismissible d-flex" style="justify-content: space-around;"
+                role="alert">
+                <div id="form_errors">
+                    {% for key, value in profile_form.errors.items %}
+                    <strong>{{ value }} {{ key }}</strong>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+            {% if user_form.errors %}
+            <div id="msg" class="alert alert-danger alert-dismissible d-flex" style="justify-content: space-around;"
+                role="alert">
+                <div id="form_errors">
+                    {% for key, value in user_form.errors.items %}
+                    <strong>{{ value }}</strong>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+            {% csrf_token %}
+            {% load widget_tweaks %}
+            {% render_field profile_form.image class="form-control mt-2 mb-2" id="profile_image" %}
+            {% render_field user_form.first_name class="form-control mt-2 mb-2" id="first_name" placeholder="First Name"
+            %}
+            {% render_field user_form.last_name class="form-control mt-2 mb-2" id="last_name" placeholder="Last Name" %}
+            <div class="d-flex" style="align-items: center;">
+                <span style="font-size: 35px;">@</span>
+                {% render_field user_form.username class="form-control mt-2 mb-2" id="username" placeholder="username"
+                %}
+            </div>
+            {% render_field profile_form.bio class="form-control mt-2 mb-2" id="bio" placeholder="Bio" %}
+            <button type="submit" id="update_btn" class="btn btn-outline-success w-100">Update Profile</button>
+            <a href="{% url 'app:password_change' %}">Change Password</a>
+        </form>
+        {% endif %}
+    </div>
+
+    <script src="{% static 'js/profile.js' %}"></script>
+</body>
+
+</html>
