@@ -7,16 +7,16 @@
 
         <nav id="navbar" class="navbar">
             <ul>
-                <form action="" class="d-flex">
+                <form action="{% url 'app:results' %}" class="d-flex">
                     <input type="text" name="q" class="form-control" placeholder="Search" value="{{ search }}" minlength="3" maxlength="32">
                     <button class="btn btn-outline-primary bi bi-search" type="submit"></button>
                 </form>
                 <li class="dropdown"><a href="#"><span>Drop Down</span> <i class="bi bi-chevron-down"></i></a>
                     <ul>
                         {% if request.user.is_authenticated %}
-                        <li><a href="">Profile</a></li>
+                        <li><a href="{% url 'app:profile' request.user.username %}">Profile</a></li>
                         {% endif %}
-                        <li><a href="">New</a></li>
+                        <li><a href="{% url 'app:new' %}">New</a></li>
                         <li><a href="#">Drop Down 4</a></li>
                         {% if not request.user.is_authenticated %}
                         <li class="dropdown"><a href="#"><span>Scroll</span> <i class="bi bi-chevron-right"></i></a>
@@ -33,11 +33,11 @@
                     </ul>
                 </li>
                 {% if not request.user.is_authenticated %}
-                <li><a class="getstarted nav-link scrollto " href="">Sign Up</a></li>
+                <li><a class="getstarted nav-link scrollto " href="{% url 'app:signup' %}">Sign Up</a></li>
                 <li><a class="nav-link scrollto" href="{% url 'app:login' %}">Login</a></li>
                 {% endif %}
                 {% if request.user.is_authenticated %}
-                <li><a class="nav-link scrollto" href="">LogOut</a></li>
+                <li><a class="nav-link scrollto" href="{% url 'app:logout' %}">LogOut</a></li>
                 {% endif %}
             </ul>
             <i class="bi bi-list mobile-nav-toggle"></i>

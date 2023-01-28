@@ -5,7 +5,6 @@ from django.db import models
 class MyUser(models.Model):
     is_organiser = models.BooleanField(default=False)
     is_agent = models.BooleanField(default=False)
-    following = models.ManyToManyField("self", blank=True, related_name="followers", symmetrical=False)
     email_confirmed = models.BooleanField(default=False)
 
 class ContactUs(models.Model):
