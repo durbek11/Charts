@@ -43,3 +43,27 @@ def followToggle(request, author):
     else:
         return redirect('app:login')
 
+def results(request):
+    search = None
+    users = None
+    charts = None
+    user_count = 0
+    chart_count = 0
+    if 'q' in request.GET:
+        search = request.GET['q']
+        user_search = Q(Q(username__icontains=search))
+        chart_search = Q(Q(slug__icontains=search))
+        users = User.objects.filter(user_search)
+        charts = Chart.objects.filter(chart_search)
+        user_count = users.count()
+        chart_count = charts.count()
+    if search==None or len(search) < 3: # bitta harf bilan qidirmaslig uchun
+        return redirect('app:home')
+    context={
+        "users":users,
+        "charts":charts,
+        "user_count":user_count,
+        "chart_count":chart_count,
+        "search":search
+    }
+    return render(request, "pages/result.html", context)
