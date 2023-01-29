@@ -73,7 +73,26 @@ def results(request):
         "search":search
     }
     return render(request, "pages/result.html", context)
-
+def NewChartView(request):
+    user_p = User.objects.get(username=request.user)
+    user = User.objects.get(username=request.user)
+    author = get_object_or_404(User, username=request.user)
+    dash = author.chart.all()
+    new_dash = None
+    NewChart = ChartFrom()
+    if request.method == 'POST':
+        NewChart = ChartFrom(data=request.POST)
+        if NewChart.is_valid():
+            new_dash = NewChart.save(commit=False)
+            new_dash.author = author
+            new_dash.save()
+            slug = NewChart.cleaned_data.get('slug')
+            return redirect("app:chart", slug) 
+   
+    context={
+        "NewChart":NewChart,
+    }
+    return render(request, "pages/new.html", context)
 def ChartView(request, slug):
     chart = Chart.objects.get(slug=slug)
     post = get_object_or_404(Chart, slug=slug)
