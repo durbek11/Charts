@@ -74,6 +74,33 @@ def results(request):
     }
     return render(request, "pages/result.html", context)
 
+def ChartView(request, slug):
+    chart = Chart.objects.get(slug=slug)
+    post = get_object_or_404(Chart, slug=slug)
+    elements = post.element.all()
+    elements_count = post.element.count()
+    number_avg = post.element.aggregate(Avg("value"))
+    new_element= None
+    # add element form
+    if request.method == 'POST':
+        comment_form = ElementForm(data=request.POST)
+        if comment_form.is_valid():
+            new_element = comment_form.save(commit=False)
+            new_element.post = post
+            new_element.save()
+            return redirect("app:chart", slug) # redirect to this url
+    else:
+        comment_form = ElementForm()
+    context= {
+        'elements': elements,
+        'comment_form': comment_form,
+        "chart":chart,
+        "elements_count":elements_count,
+        "number_avg":number_avg,
+        }
+    
+    return render(request, "pages/chart.html", context)
+
 def ProfileView(request, username):
         user_p = User.objects.get(username=username)
         author = get_object_or_404(User, username=username)
